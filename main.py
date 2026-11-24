@@ -1,41 +1,52 @@
-"""News image entry for make.fun: news-image-20261124.
+#!/usr/bin/env python3
+"""Publish the 24 November 2026 front page for the make.fun harness.
 
-Sums up the world news of Tuesday 24 November 2026 in one image.
-
-The image itself is entry.png beside this file. It was drawn for this
-entry as a dense one-page newspaper front page: a masthead with the
-date, a lead story on the UN probe after Ukraine sank a Russian
-warship off Libya, four big headlines (Nvidia soaring 31% as Huang
-returns, Russia's nuclear warning, the Iran war deepening, and
-fourteen nations backing the Rohingya genocide ruling), and a dated
-"day in brief" grid — 32 stories in total, every one reported on
-24 November 2026, across eight regions.
-
-This program only copies that image to the output path. It uses the
-standard library only, makes no network call, and reads nothing
-outside its own directory, so running it twice writes the same bytes.
-The image was rendered at build time by render_image.py (Pillow),
-which wraps every line by measured pixel width so no text overlaps.
+The entry image lives next to this file as entry.png. All this program
+does is place an exact copy of it where the harness expects it, then
+confirm the copy is complete by comparing file sizes. Nothing here
+touches the network, and nothing is random, so repeated runs produce
+identical output bytes.
 """
 
 import os
-import shutil
-from pathlib import Path
+import sys
 
-HERE = Path(__file__).resolve().parent
-SOURCE = HERE / "entry.png"
+CHUNK = 1 << 20
 
 
-def main() -> None:
-    if not SOURCE.is_file():
-        raise FileNotFoundError(f"entry image missing: {SOURCE}")
-    out_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
-    out_dir.mkdir(parents=True, exist_ok=True)
-    target = out_dir / "entry.png"
-    shutil.copyfile(SOURCE, target)
-    if target.stat().st_size > 1_048_576:
-        raise ValueError("entry image is over the 1 MiB limit")
+def output_directory():
+    """Directory the harness reads, from the environment or the default."""
+    return os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
+
+
+def publish(source, destination):
+    """Copy source to destination in 1 MiB chunks; return bytes written."""
+    written = 0
+    with open(source, "rb") as src, open(destination, "wb") as dst:
+        while True:
+            block = src.read(CHUNK)
+            if not block:
+                break
+            dst.write(block)
+            written += len(block)
+    return written
+
+
+def main(argv=None):
+    here = os.path.dirname(os.path.abspath(__file__))
+    source = os.path.join(here, "entry.png")
+    if not os.path.isfile(source):
+        print(f"entry image not found: {source}", file=sys.stderr)
+        return 1
+    out_dir = output_directory()
+    os.makedirs(out_dir, exist_ok=True)
+    destination = os.path.join(out_dir, "entry.png")
+    copied = publish(source, destination)
+    if copied != os.path.getsize(source):
+        print("copy incomplete", file=sys.stderr)
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
