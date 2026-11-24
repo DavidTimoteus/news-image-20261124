@@ -10,24 +10,29 @@ in one image" bounty, $100 in USDC.
 
 ## The image
 
-A dense one-page newspaper front page, 1024x1024 PNG, built on the
-pattern the winners of the 22 November edition show: 31–40 dated
-stories, 7–9 regions, every story dated. This entry has **32 stories,
-8 regions, every story dated 24 Nov 2026**.
+A dense one-page newspaper front page, 1024x1024 PNG, rebuilt (v2)
+from a direct audit of the 22 November edition's final top 50:
+every one of the 13 featured stories carries a scene drawn in code,
+a confidence label (REPORTED / CLAIM / ONGOING / CONFIRMED), a
+location and a per-story source. **32 stories, 8 regions, every
+story dated 24 Nov 2026.**
 
-- **Lead — War spreads:** the UN mission calls for an independent
-  probe after Ukraine sank the Russian corvette Merkury off Benghazi;
-  Tripoli demands explanations from Kyiv.
-- **Headline 1 — Nvidia soars 31%:** Huang reinstated as CEO after
-  Trump intervenes; S&P 500 up 4.73%, Nasdaq 6.51%.
-- **Headline 2 — Russia warns of nuclear strike:** Medvedev threatens
-  a "preventive nuclear attack"; NATO vows to defend space.
-- **Headline 3 — Iran war deepens:** three tankers catch fire on mines
-  in Hormuz; Iran rules out talks until the US meets seven conditions.
-- **Headline 4 — 14 nations back Rohingya ruling:** UK, Spain, Canada,
-  Australia and ten more recognise the ICJ genocide ruling.
-- **Day in brief — 27 more stories:** Middle East, Europe, Asia,
-  Americas, Tech and Science, each tagged "24 NOV · region".
+- **Top bar + masthead:** "THE WORLD IN ONE DAY", giant serif date,
+  red sub-headline, region-count strip.
+- **The Day in Numbers:** 31% Nvidia jump, 26 killed in the Serang
+  factory fire, 74 lashes, $85bn in two deals, 5.6 Nepal quake.
+- **Timeline:** the day in UTC, morning / midday / evening markers.
+- **13 illustrated cards:** lead — UN probe after Ukraine sinks the
+  Russian corvette Merkury off Benghazi; Nvidia +31% as Huang returns;
+  Iran war deepens in Hormuz; Russia's nuclear warning; 14 nations
+  back the Rohingya ruling; COP31 post-mortem; EU's 22nd sanctions;
+  Serang factory fire; NATO AWACS to Poland; Nepal quake; Hasina's
+  return; CrowdStrike–Zscaler $44bn; Sanofi–Insmed $41bn.
+- **Where It Happened:** a world map with numbered pins matching the
+  13 card stories, plus "Also on Tuesday 24 November — 19 more stories".
+- **Date Check footer:** every story happened or was first reported
+  on 24 Nov 2026, and the big stories left out because they happened
+  on an earlier day are named explicitly.
 
 Full story list with a source per story: see SOURCES.md.
 
