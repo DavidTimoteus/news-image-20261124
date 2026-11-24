@@ -1,50 +1,23 @@
 #!/usr/bin/env python3
-"""Publish the 24 November 2026 front page for the make.fun harness.
+"""Entry program for make.fun news-image-20261124 (v2).
 
-The entry image lives next to this file as entry.png. All this program
-does is place an exact copy of it where the harness expects it, then
-confirm the copy is complete by comparing file sizes. Nothing here
-touches the network, and nothing is random, so repeated runs produce
-identical output bytes.
+Copies the pre-rendered front page (entry.png, drawn in code by
+render_image.py with Pillow) to the output directory. Standard
+library only, no network, no randomness: two runs write identical
+bytes.
 """
-
 import os
+import shutil
 import sys
+from pathlib import Path
 
-CHUNK = 1 << 20
-
-
-def output_directory():
-    """Directory the harness reads, from the environment or the default."""
-    return os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
+HERE = Path(__file__).resolve().parent
 
 
-def publish(source, destination):
-    """Copy source to destination in 1 MiB chunks; return bytes written."""
-    written = 0
-    with open(source, "rb") as src, open(destination, "wb") as dst:
-        while True:
-            block = src.read(CHUNK)
-            if not block:
-                break
-            dst.write(block)
-            written += len(block)
-    return written
-
-
-def main(argv=None):
-    here = os.path.dirname(os.path.abspath(__file__))
-    source = os.path.join(here, "entry.png")
-    if not os.path.isfile(source):
-        print(f"entry image not found: {source}", file=sys.stderr)
-        return 1
-    out_dir = output_directory()
-    os.makedirs(out_dir, exist_ok=True)
-    destination = os.path.join(out_dir, "entry.png")
-    copied = publish(source, destination)
-    if copied != os.path.getsize(source):
-        print("copy incomplete", file=sys.stderr)
-        return 1
+def main() -> int:
+    out_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
+    out_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(HERE / "entry.png", out_dir / "entry.png")
     return 0
 
 
