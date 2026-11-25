@@ -1,26 +1,24 @@
 #!/usr/bin/env python3
-"""Entrypoint: emit the pre-rendered front page as /output/entry.png.
+"""Entry point: copy the pre-rendered front page to /output/entry.png.
 
-The image is rendered at build time by render_image.py (Pillow, code-drawn);
-this program only places the exact bytes at the harness output path, so two
-runs always produce identical output.
+Stdlib only. Deterministic: a plain byte-for-byte copy, no timestamps,
+no randomness, no network. Running it twice writes identical bytes.
 """
+
 import os
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-SRC = os.path.join(HERE, "entry.png")
-DST_DIR = "/output"
-DST = os.path.join(DST_DIR, "entry.png")
+SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)), "entry.png")
+DST = "/output/entry.png"
 
 
 def main():
-    os.makedirs(DST_DIR, exist_ok=True)
-    with open(SRC, "rb") as src, open(DST, "wb") as dst:
+    os.makedirs(os.path.dirname(DST), exist_ok=True)
+    with open(SRC, "rb") as fin, open(DST, "wb") as fout:
         while True:
-            block = src.read(1 << 16)
+            block = fin.read(8192)
             if not block:
                 break
-            dst.write(block)
+            fout.write(block)
 
 
 if __name__ == "__main__":
